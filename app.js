@@ -80,9 +80,9 @@ app.post('/createUser', (req, res) => {
             return console.error(err);
         }
         console.log(`new user save: ${data}`);
-        res.send(`done ${data}`);
+        res.redirect('/userList')
     });
-    res.redirect('/userList')
+    
 });
 
 app.post('/editUser/:id', (req, res) => {
