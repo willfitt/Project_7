@@ -1,22 +1,25 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+const mongoose = require('mongoose');
 const port = process.env.PORT || 3000;
-const fs = require('fs');
-let userId = 1
-let stream = fs.createWriteStream('userList.log');
+mongoose.connect('mongodb://localhost/userList',
+    { useNewUrlParser: true });
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function () {
+    console.log('db connected');
+});
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-class User {
-    constructor(id, fName, lName, email, age) {
-        this.id = id;
-        this.fName = fName;
-        this.lName = lName;
-        this.email = email;
-        this.age = age;
-    }
-}
+const userSchema = new mongoose.Schema({
+    fName: String,
+    lName: String,
+    email: String,
+    age: { type: Number, min: 18, max: 70 },
+});
+const user = mongoose.model('userCollection', userSchema);
 
 class UserService {
     constructor() {
@@ -28,21 +31,21 @@ class UserService {
         stream.write(`added: ${JSON.stringify(user)}\n`);
     }
 
-    getUser(id){
+    getUser(id) {
         return this.userArray.find((user) => user.id == id);
     }
 
-    editUser(user){
+    editUser(user) {
         let currentUser = this.getUser(user.id);
         currentUser.fName = user.fName
         currentUser.fLame = user.fLame
-        currentUser.age = user.Age
-        currentUser.email = user.Email
+        currentUser.age = user.age
+        currentUser.email = user.email
     }
-    
-    deleteUser(id){
+
+    deleteUser(id) {
         let currentUser = this.userArray.find((user) => user.id == id);
-        let currentUserIndex = this.userArray.findIndex((user) => user === currentUser );
+        let currentUserIndex = this.userArray.findIndex((user) => user === currentUser);
         this.userArray.splice(currentUserIndex, 1)
     }
 }
@@ -57,17 +60,28 @@ app.get('/', (req, res) => {
     res.render('createUser')
 });
 app.get('/userList', (req, res) => {
-    res.render('userListing', {userArray: userService.userArray,
-                               editRedirect: userService.editUser})
+    res.render('userListing', {
+        userArray: userService.userArray
+    })
 });
 app.get('/user/edit/:id', (req, res) => {
     let userToEdit = userService.getUser(req.params.id)
-    res.render('editUser', {editUser: userToEdit})
+    res.render('editUser', { editUser: userToEdit })
 });
 
 app.post('/createUser', (req, res) => {
-    const newUser = new User(userId++, req.body.fName, req.body.lName, req.body.Email, req.body.Age)
-    userService.addUser(newUser)
+    const newUser = new user();
+    newUser.fName = req.body.fName
+    newUser.lName = req.body.lName 
+    newUser.email = req.body.email
+    newUser.age = req.body.age
+    newUser.save((err, data) => {
+        if (err) {
+            return console.error(err);
+        }
+        console.log(`new user save: ${data}`);
+        res.send(`done ${data}`);
+    });
     res.redirect('/userList')
 });
 
