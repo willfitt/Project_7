@@ -1,0 +1,18 @@
+html
+    head
+    body
+        form(action='/createUser' method='POST') 
+            div
+                label(for='fName') First Name
+                input(id='fName', name='fName')
+            div
+                label(for='lName') Last Name
+                input(id='lName', name='lName')
+            div
+                label(for='Age') Age
+                input(id='Age', name='Age')
+            div
+                label(for='Email') Email
+                input(id='Email', name='Email')
+            div
+                input(type='submit')
