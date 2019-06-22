@@ -10,8 +10,6 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {
     console.log('db connected');
 });
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 const userSchema = new mongoose.Schema({
     fName: String,
