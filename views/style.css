@@ -1,9 +1,19 @@
 
 table {
-    border: 1px solid black
+    border: 1px solid black;
+    width: 100%
 }
 
 tr, td {
     text-align: center;
     border: 1px solid black
+}
+
+.noBorder{
+    border: none !important;
+}
+
+a{
+    text-decoration: none;
+    color: black;
 }

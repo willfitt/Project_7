@@ -17,13 +17,14 @@ html
                     td= user.lName
                     td= user.email
                     td= user.age
-                    td 
+                    td(class="noBorder")
                         button
                             a( href="/user/edit/" + user._id) Edit
-                    td
+                    td(class="noBorder")
                         form(action='/deleteUser/' + user.id, method='POST')
                             input(type='submit' value='Delete' style="margin-top: 15px")
             tr
-                td
+                td(class="noBorder")
                     button
                         a( href="/") Add new user
+                    
