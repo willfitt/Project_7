@@ -1,5 +1,7 @@
 html
     head
+        style
+            include style.css
     body
         table
             tr
@@ -21,3 +23,7 @@ html
                     td
                         form(action='/deleteUser/' + user.id, method='POST')
                             input(type='submit' value='Delete' style="margin-top: 15px")
+            tr
+                td
+                    button
+                        a( href="/") Add new user
