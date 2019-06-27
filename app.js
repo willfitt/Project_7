@@ -6,6 +6,7 @@ const port = process.env.PORT || 3000;
 mongoose.connect('mongodb://localhost/userList',
     { useNewUrlParser: true });
 const db = mongoose.connection;
+mongoose.set('useFindAndModify', false);
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {
     console.log('db connected');
@@ -59,7 +60,7 @@ app.post('/createUser', (req, res) => {
 });
 
 app.post('/editUser/:id', (req, res) => {
-    mongoose.model('userCollection').findOneAndUpdate(
+    mongoose.model('userCollection').findByIdAndUpdate(
         req.params.id, { fName: req.body.fName, lName: req.body.lName, age: req.body.age, email: req.body.email }, function (err){
             if (err) return handleError(err);
             res.redirect('/userList')
