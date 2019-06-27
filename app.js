@@ -15,40 +15,10 @@ const userSchema = new mongoose.Schema({
     fName: String,
     lName: String,
     email: String,
-    age: { type: Number, min: 18, max: 70 },
+    age: Number,
 });
+
 const user = mongoose.model('userCollection', userSchema);
-
-class UserService {
-    constructor() {
-        this.userArray = [];
-    }
-
-    addUser(user) {
-        this.userArray.push(user)
-        stream.write(`added: ${JSON.stringify(user)}\n`);
-    }
-
-    getUser(id) {
-        return this.userArray.find((user) => user.id == id);
-    }
-
-    editUser(user) {
-        let currentUser = this.getUser(user.id);
-        currentUser.fName = user.fName
-        currentUser.fLame = user.fLame
-        currentUser.age = user.age
-        currentUser.email = user.email
-    }
-
-    deleteUser(id) {
-        let currentUser = this.userArray.find((user) => user.id == id);
-        let currentUserIndex = this.userArray.findIndex((user) => user === currentUser);
-        this.userArray.splice(currentUserIndex, 1)
-    }
-}
-
-let userService = new UserService();
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -58,13 +28,18 @@ app.get('/', (req, res) => {
     res.render('createUser')
 });
 app.get('/userList', (req, res) => {
-    res.render('userListing', {
-        userArray: userService.userArray
-    })
+     mongoose.model('userCollection').find( function (err, users) {
+        if (err) return handleError(err);
+        res.render('userListing', {
+            userArray: users
+        })
+      })    
 });
 app.get('/user/edit/:id', (req, res) => {
-    let userToEdit = userService.getUser(req.params.id)
-    res.render('editUser', { editUser: userToEdit })
+    mongoose.model('userCollection').findById(req.params.id, function(err, user) {
+        if (err) return handleError(err);
+        res.render('editUser', { editUser: user })
+    })
 });
 
 app.post('/createUser', (req, res) => {
@@ -84,15 +59,19 @@ app.post('/createUser', (req, res) => {
 });
 
 app.post('/editUser/:id', (req, res) => {
-    let currentUser = req.body;
-    currentUser.id = req.params.id;
-    userService.editUser(currentUser)
-    res.redirect('/userList')
+    mongoose.model('userCollection').findOneAndUpdate(
+        req.params.id, { fName: req.body.fName, lName: req.body.lName, age: req.body.age, email: req.body.email }, function (err){
+            if (err) return handleError(err);
+            res.redirect('/userList')
+        });
+
 });
 
 app.post('/deleteUser/:id', (req, res) => {
-    userService.deleteUser(req.params.id)
-    res.redirect('/userList')
+    mongoose.model('userCollection').deleteOne({ _id: req.params.id}, function (err){
+        if (err) return handleError(err);
+        res.redirect('/userList')
+      });
 });
 
 
