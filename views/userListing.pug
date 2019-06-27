@@ -2,29 +2,35 @@ html
     head
         style
             include style.css
+        
+        script(src="/scripts/sort.js") 
+        script(src='/scripts/domReady.js')
+        link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css")
+ 
     body
-        table
-            tr
-                th ID
-                th First Name
-                th Last Name
-                th Email
-                th Age
-            for user in userArray    
+        table(class='ui sortable celled table')
+            thead
                 tr
-                    td= user._id
-                    td= user.fName
-                    td= user.lName
-                    td= user.email
-                    td= user.age
-                    td(class="noBorder")
-                        button
-                            a( href="/user/edit/" + user._id) Edit
-                    td(class="noBorder")
-                        form(action='/deleteUser/' + user.id, method='POST')
-                            input(type='submit' value='Delete' style="margin-top: 15px")
+                    th ID
+                    th First Name
+                    th Last Name
+                    th Email
+                    th Age
+            tbody        
+                for user in userArray    
+                    tr
+                        td= user._id
+                        td= user.fName
+                        td= user.lName
+                        td= user.email
+                        td= user.age
+                        td(class="noBorder")
+                            button
+                                a( href="/user/edit/" + user._id) Edit
+                        td(class="noBorder")
+                            form(action='/deleteUser/' + user.id, method='POST')
+                                input(type='submit' value='Delete' style="margin-top: 15px")
             tr
                 td(class="noBorder")
                     button
                         a( href="/") Add new user
-                    

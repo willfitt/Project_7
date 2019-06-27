@@ -1,5 +1,5 @@
 
-table {
+/* table {
     border: 1px solid black;
     width: 100%
 }
@@ -7,7 +7,7 @@ table {
 tr, td {
     text-align: center;
     border: 1px solid black
-}
+} */
 
 .noBorder{
     border: none !important;
@@ -17,3 +17,13 @@ a{
     text-decoration: none;
     color: black;
 }
+
+/* .noButton {
+    background:none;
+    color:inherit;
+    border:none; 
+    padding:0!important;
+    font: inherit;
+    cursor: pointer;
+    margin-top: 15px;
+} */

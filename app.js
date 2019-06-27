@@ -36,6 +36,7 @@ app.get('/userList', (req, res) => {
         })
       })    
 });
+
 app.get('/user/edit/:id', (req, res) => {
     mongoose.model('userCollection').findById(req.params.id, function(err, user) {
         if (err) return handleError(err);
@@ -56,7 +57,10 @@ app.post('/createUser', (req, res) => {
         console.log(`new user save: ${data}`);
         res.redirect('/userList')
     });
-    
+});
+
+app.post('/sortUser', (req, res) => {
+    mongoose.model('userCollection').sort()
 });
 
 app.post('/editUser/:id', (req, res) => {
@@ -65,7 +69,6 @@ app.post('/editUser/:id', (req, res) => {
             if (err) return handleError(err);
             res.redirect('/userList')
         });
-
 });
 
 app.post('/deleteUser/:id', (req, res) => {
