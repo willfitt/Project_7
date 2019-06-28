@@ -1,13 +1,4 @@
 
-/* table {
-    border: 1px solid black;
-    width: 100%
-}
-
-tr, td {
-    text-align: center;
-    border: 1px solid black
-} */
 
 .noBorder{
     border: none !important;
@@ -15,7 +6,7 @@ tr, td {
 
 a{
     text-decoration: none;
-    color: black;
+    color: black !important;
 }
 
 /* .noButton {
