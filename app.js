@@ -63,6 +63,15 @@ app.post('/sortUser', (req, res) => {
     mongoose.model('userCollection').sort()
 });
 
+app.post('/findUsers', (req, res) => {
+    mongoose.model('userCollection').findOne( {fName: req.params.fName}, function(err) {
+        if (err) return handleError(err);
+        res.render('userListing', {
+            userArray: users
+        })
+    })
+})
+
 app.post('/editUser/:id', (req, res) => {
     mongoose.model('userCollection').findByIdAndUpdate(
         req.params.id, { fName: req.body.fName, lName: req.body.lName, age: req.body.age, email: req.body.email }, function (err){
