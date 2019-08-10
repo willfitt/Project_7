@@ -22,7 +22,7 @@ app.post('/createUser', db.createUser, (req, res) => {
     res.redirect('/userList')
 });
 
-// app.post('/sortUser', db.sortUser); implement?
+// app.post('/sortUser', db.sortUser); implement??
 
 // app.post('/findUsers', db.findUsers, (req, res) => {
 //         res.render('userListing');
